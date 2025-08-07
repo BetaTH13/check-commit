@@ -3,7 +3,7 @@ description: This action will peform checks on your commits.
 author: BetaTH13
 inputs:
   keyword:
-    description: 'Keyword to search for in commit messages.'
+    description: 'Keyword to search for in commit messages'
     required: true
 
 runs:

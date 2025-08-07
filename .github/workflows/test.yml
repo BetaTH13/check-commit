@@ -15,6 +15,6 @@ jobs:
           fetch-depth: 0
 
       - name: Run commit keyword check
-        uses: BetaTH13/check-commit@v1
+        uses: ./  # <-- path to your action.yml folder
         with:
           keyword: "JIRA-"
