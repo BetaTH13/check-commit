@@ -1,0 +1,21 @@
+name: Test Commit Keyword Action
+
+on:
+  pull_request:
+    branches: [main] # or your test branch
+
+jobs:
+  test-keyword:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout full history so tests are realistic
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Step 2: Run your composite action locally
+      - name: Run commit keyword check
+        uses: ./commit-keyword  # <-- path to your action.yml folder
+        with:
+          keyword: "JIRA-"

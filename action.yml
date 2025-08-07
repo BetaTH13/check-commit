@@ -1,0 +1,47 @@
+name: Check Commit Messages
+description: This action will peform checks on your commits. 
+author: BetaTH13
+inputs:
+  keyword:
+    description: 'Keyword to search for in commit messages'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure this is a PR
+      shell: bash
+      run: |
+        if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+          echo "❌ This action only supports pull_request events."
+          exit 1
+        fi
+
+    - name: Fetch PR commit
+      shell: bash
+      run: |
+        git fetch --prune --unshallow || true
+        git fetch origin "${{ github.event.pull_request.head.ref }}"
+
+    - name: Check commit message for keyword
+      shell: bash
+      run: |
+        KEYOWRD="${{ inputs.keyword }}"
+        BASE="${{ github.event.pull_request.base.sha }}"
+        HEAD="${{ github.event.pull_request.head.sha }}"
+
+        COMMITS=$(git log --pretty=format:%s "$BASE..$HEAD")
+
+        echo "$COMMITS" | while read -r msg; do
+          echo "- $msg"
+        done
+
+        echo "✅ Total commits: $TOTAL"
+        echo "✅ Matching commits: $MATCHING"
+
+        if [[ "$MATCHING" -eq 0 ]]; then
+          echo "❌ No commit messages in the PR contain the keyword '$KEYWORD'"
+          exit 1
+        else
+          echo "✅ Passed"
+        fi
