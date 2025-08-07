@@ -15,6 +15,6 @@ jobs:
           fetch-depth: 0
 
       - name: Run commit keyword check
-        uses: .  # <-- path to your action.yml folder
+        uses: ./  # <-- path to your action.yml folder
         with:
           keyword: "JIRA-"
