@@ -2,7 +2,7 @@ name: Test Commit Keyword Action
 
 on:
   pull_request:
-    branches: [main] # or your test branch
+    branches: [ master ] # or your test branch
 
 jobs:
   test-keyword:
