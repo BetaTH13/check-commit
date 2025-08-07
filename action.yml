@@ -1,0 +1,37 @@
+name: check-commit-messages
+description: Checks commit messages in a pull request for a specific keyword. By default the action passes if atleast one commit contains the keyword. Over the input require-all all messages need to match.
+author: BetaTH13
+
+inputs:
+  keyword:
+    description: "Keyword to search for in commit messages"
+    required: true
+  require-all:
+    description: "All commit messages must contain the keyword"
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure this is a PR
+      shell: bash
+      run: |
+        if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+          echo "❌ This action only supports pull_request events."
+          exit 1
+        fi
+
+    - name: Fetch PR commit
+      shell: bash
+      run: |
+        git fetch --prune || true
+
+    - name: Check commit message for keyword
+      shell: bash
+      run: |
+        bash "${GITHUB_ACTION_PATH}/scripts/check-commits.sh" \
+          "${{ inputs.keyword }}" \
+          "${{ inputs.require-all }}" \
+          "${{ github.event.pull_request.base.sha }}" \
+          "${{ github.event.pull_request.head.sha }}"
