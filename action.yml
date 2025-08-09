@@ -25,12 +25,12 @@ runs:
     - name: Fetch PR commit
       shell: bash
       run: |
-        git fetch --prune --unshallow || true
+        git fetch --prune || true
 
     - name: Check commit message for keyword
       shell: bash
       run: |
-        bash "./scripts/check_commits.sh" \
+        bash "${GITHUB_ACTION_PATH}/scripts/check_commits.sh" \
           "${{ inputs.keyword }}" \
           "${{ inputs.require-all }}" \
           "${{ github.event.pull_request.base.sha }}" \
