@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # extract all the parameters for the action
 KEYWORD="${1:?keyword}"
@@ -8,10 +9,17 @@ HEAD="${4:?head_sha}"
 
 # convert the REQ_ALL_RAW argument into bool value 
 REQ_ALL="$(echo "$REQ_ALL_RAW" | tr '[:upper:]' '[:lower:]')"
-[[ "$REQ_ALL" == "true" || "$REQ_ALL" == "false" ]] || REQ_ALL="false"
+if [[ "$REQ_ALL" == "true" || "$REQ_ALL" == "false" ]]; then
+ REQ_ALL="false"
+fi
+
+if (( ${#KEYWORD} > 256 )); then
+  echo "Keyword too long (max 256 chars)."
+  exit 1
+fi
 
 # Retrieve all commits which happened from the BASE up until the HEAD (simply said everything in the PR).
-COMMITS="$(git log --pretty=format:%s "$BASE..$HEAD" || true)"
+COMMITS="$(git log --pretty=format:%s "$BASE..$HEAD" -- || true)"
 
 # prints all commits in case any are present.
 if [[ -n "$COMMITS" ]]; then
