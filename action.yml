@@ -32,12 +32,14 @@ runs:
         KEYWORD="${{ inputs.keyword }}"
         BASE="${{ github.event.pull_request.base.sha }}"
         HEAD="${{ github.event.pull_request.head.sha }}"
-
         COMMITS=$(git log --pretty=format:%s "$BASE..$HEAD")
 
         echo "$COMMITS" | while read -r msg; do
           echo "- $msg"
         done
+
+        TOTAL="$(echo "$COMMITS" | sed '/^\s*$/d' | wc -l | tr -d ' ')"
+        MATCHING="$(echo "$COMMITS" | grep -F -c "$KEYWORD" || true)"
 
         echo "✅ Total commits: $TOTAL"
         echo "✅ Matching commits: $MATCHING"
