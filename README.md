@@ -34,10 +34,12 @@ jobs:
 
 ## Inputs
 
-| Name | Required | Description
-|keyword | Yes | The keyword which needs to be contained in the commit message
-|require-all| No | When **"false"** only 1 commit needs to containt the commit message. When **"true"** all commit messages must contain the keyword
+| Name        | Required | Description                                                                                                                       |
+| ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| keyword     | Yes      | The keyword which needs to be contained in the commit message                                                                     |
+| require-all | No       | If  `"false"` only 1 commit needs to containt the commit message. If `"true"` all commit messages must contain the keyword |
 
 ## Issues
 
-Feel free to open issues in case of bugs or if you want to request for a new feature
+Found a bug or have a feature request?
+Please open an issue on the repository.
