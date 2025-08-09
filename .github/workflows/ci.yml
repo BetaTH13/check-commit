@@ -20,3 +20,24 @@ jobs:
         run: |
           echo "❌ Expected failure did not happen"
           exit 1
+          
+  fails-when-keyword-too-long:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run action with too-long keyword (should fail)
+        id: run-long
+        continue-on-error: true
+        uses: ./
+        with:
+          keyword: |
+            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+      - name: Assert keyword length check triggered
+        if: steps.run-long.outcome == 'success'
+        run: |
+          echo "❌ Expected failure for long keyword did not happen"
+          exit 1
