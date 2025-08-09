@@ -1,5 +1,5 @@
-name: Check Commit Messages
-description: This action will peform checks on your commits.
+name: check-commit-messages
+description: Checks commit messages in a pull request for a specific keyword. By default the action passes if atleast one commit contains the keyword. Over the input require-all all messages need to match.
 author: BetaTH13
 
 inputs:
