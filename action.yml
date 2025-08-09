@@ -1,13 +1,15 @@
 name: Check Commit Messages
 description: This action will peform checks on your commits.
 author: BetaTH13
+
 inputs:
   keyword:
     description: "Keyword to search for in commit messages"
     required: true
-  contains-all:
+  require-all:
     description: "All commit messages must contain the keyword"
     required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -24,29 +26,12 @@ runs:
       shell: bash
       run: |
         git fetch --prune --unshallow || true
-        git fetch origin "${{ github.event.pull_request.head.ref }}"
 
     - name: Check commit message for keyword
       shell: bash
       run: |
-        KEYWORD="${{ inputs.keyword }}"
-        BASE="${{ github.event.pull_request.base.sha }}"
-        HEAD="${{ github.event.pull_request.head.sha }}"
-        COMMITS=$(git log --pretty=format:%s "$BASE..$HEAD")
-
-        echo "$COMMITS" | while read -r msg; do
-          echo "- $msg"
-        done
-
-        TOTAL="$(echo "$COMMITS" | sed '/^\s*$/d' | wc -l | tr -d ' ')"
-        MATCHING="$(echo "$COMMITS" | grep -F -c "$KEYWORD" || true)"
-
-        echo "✅ Total commits: $TOTAL"
-        echo "✅ Matching commits: $MATCHING"
-
-        if [[ "$MATCHING" -eq 0 ]]; then
-          echo "❌ No commit messages in the PR contain the keyword '$KEYWORD'"
-          exit 1
-        else
-          echo "✅ Passed"
-        fi
+        bash "./scripts/check_commits.sh" \
+          "${{ inputs.keyword }}" \
+          "${{ inputs.require-all }}" \
+          "${{ github.event.pull_request.base.sha }}" \
+          "${{ github.event.pull_request.head.sha }}"

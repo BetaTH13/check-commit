@@ -13,10 +13,10 @@ jobs:
         continue-on-error: true
         uses: ./
         with:
-          keyword: __definitely_not_in_commits__
+          keyword: "$RANDOM-$(date +%s)"
 
       - name: Assert it failed as expected
         if: steps.run.outcome == 'success'
         run: |
-          echo "::error::Expected failure did not happen"
+          echo "❌ Expected failure did not happen"
           exit 1
