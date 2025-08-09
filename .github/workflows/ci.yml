@@ -1,0 +1,22 @@
+name: CI check commit
+
+on: pull_request
+jobs:
+  fails-when-no-match:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Run action with impossible keyword (should fail)
+        id: run
+        continue-on-error: true
+        uses: ./
+        with:
+          keyword: __definitely_not_in_commits__
+
+      - name: Assert it failed as expected
+        if: steps.run.outcome == 'success'
+        run: |
+          echo "::error::Expected failure did not happen"
+          exit 1
