@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run commit message check
-        uses: BetaTH13/check-commit-messages@1.0.0
+        uses: BetaTH13/check-commit@1.0.0
         with:
           keyword: "JIRA-"
           # optional defaults to false
