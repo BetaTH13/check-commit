@@ -30,7 +30,7 @@ runs:
     - name: Check commit message for keyword
       shell: bash
       run: |
-        bash "${GITHUB_ACTION_PATH}/scripts/check_commits.sh" \
+        bash "${GITHUB_ACTION_PATH}/scripts/check-commits.sh" \
           "${{ inputs.keyword }}" \
           "${{ inputs.require-all }}" \
           "${{ github.event.pull_request.base.sha }}" \
