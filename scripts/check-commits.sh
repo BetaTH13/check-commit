@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
+# extract all the parameters for the action
 KEYWORD="${1:?keyword}"
 REQ_ALL_RAW="${2:-false}"
 BASE="${3:?base_sha}"
 HEAD="${4:?head_sha}"
 
+# convert the REQ_ALL_RAW argument into bool value 
 REQ_ALL="$(echo "$REQ_ALL_RAW" | tr '[:upper:]' '[:lower:]')"
 [[ "$REQ_ALL" == "true" || "$REQ_ALL" == "false" ]] || REQ_ALL="false"
 
+# Retrieve all commits which happened from the BASE up until the HEAD (simply said everything in the PR).
 COMMITS="$(git log --pretty=format:%s "$BASE..$HEAD" || true)"
 
-# show for debugging
+# prints all commits in case any are present.
 if [[ -n "$COMMITS" ]]; then
   echo "$COMMITS" | while read -r msg; do
     echo "- $msg"
@@ -19,7 +22,9 @@ else
   echo "⚠️ No commits found in range."
 fi
 
+# counts the amount of commits
 TOTAL="$(echo "$COMMITS" | sed '/^\s*$/d' | wc -l | tr -d ' ')"
+# counts how many matches where found in the commits
 MATCHING="$(echo "$COMMITS" | grep -F -c "$KEYWORD" || true)"
 
 echo "✅ Total commits: $TOTAL"

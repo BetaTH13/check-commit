@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# determine the scripts dir, so that the script can be executed from anywhere in the repo.
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+# creates a temporary directory
 tmp="$(mktemp -d)"
+# when the local test is finished (either from an error or an exit) the following command is executed.
+# this line ensures that after the local test is done the tmp directory and all created files are deleted  
 trap 'rm -rf "$tmp"' EXIT
 
+# setup the test repository for the local test
 cd "$tmp"
 git init -q
 git config user.name "Local"
@@ -13,6 +18,9 @@ git config user.email "local@test"
 
 PASS=0
 FAIL=0
+
+# helper function to run local tests. Should only be used for tests expecting positive results
+# this function should be used in case you expect a 0 exit from the bash script.
 run_test() {
     local desc="$1"
     shift
@@ -62,7 +70,7 @@ HEAD="$(git rev-parse HEAD)"
 run_test "require-all=true should pass when all match" \
     bash "$SCRIPT_DIR/check-commits.sh" "JIRA-" "true" "$BASE" "$HEAD"
 
-# --- Final Summary ---
+# Prints out the final summary of the local test.
 echo "=== TEST SUMMARY ==="
 echo "✅ Passed: $PASS"
 echo "❌ Failed: $FAIL"
