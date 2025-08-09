@@ -5,6 +5,25 @@ Checks if commits contans a specific keyword.
 By default if **atleast one commit** contains the keyword the actions passes.
 There is an option to require all commits to contain the keyword.
 
+## Examples
+
+### Action passed sucessfully
+
+![Sucessful example of the action](./docs/success_base.png)
+
+Above is an example where the action passed. 
+
+### Action failed require-all is set true
+
+![Failure example on require_all true](./docs/failure_require_all.png)
+
+Above is an example where the action failed because only 1/2 commits contain the keyword `JIRA-`
+
+### Action failed require-all is set to false 
+
+![Failure example on require_all false](./docs/failure_base.png)
+
+
 ## Usage
 
 An example on how to use this action in your workflows can be found under.
