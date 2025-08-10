@@ -1,6 +1,9 @@
 name: check-commit-messages-by-keyword
 description: Checks commit messages in a pull request for a specific keyword.
 author: BetaTH13
+branding:
+  icon: 'check'
+  color: 'green'
 
 inputs:
   keyword:
@@ -35,7 +38,3 @@ runs:
           "${{ inputs.require-all }}" \
           "${{ github.event.pull_request.base.sha }}" \
           "${{ github.event.pull_request.head.sha }}"
-
-branding:
-  icon: 'check'
-  color: 'green'

@@ -9,7 +9,7 @@ HEAD="${4:?head_sha}"
 
 # convert the REQ_ALL_RAW argument into bool value 
 REQ_ALL="$(echo "$REQ_ALL_RAW" | tr '[:upper:]' '[:lower:]')"
-if [[ "$REQ_ALL" == "true" || "$REQ_ALL" == "false" ]]; then
+if [[ "$REQ_ALL" != "true" ]]; then
  REQ_ALL="false"
 fi
 
