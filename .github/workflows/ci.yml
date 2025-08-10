@@ -9,14 +9,14 @@ jobs:
         with: { fetch-depth: 0 }
 
       - name: Run action with impossible keyword (should fail)
-        id: run
+        id: run-random-keyword
         continue-on-error: true
         uses: ./
         with:
           keyword: "$RANDOM-$(date +%s)"
 
       - name: Assert it failed as expected
-        if: steps.run.outcome == 'success'
+        if: steps.run-random-keyword.outcome == 'success'
         run: |
           echo "❌ Expected failure did not happen"
           exit 1
@@ -41,3 +41,22 @@ jobs:
         run: |
           echo "❌ Expected failure for long keyword did not happen"
           exit 1
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run integration tests in local-test script
+        id: run-tests
+        continue-on-error: true
+        uses: ./scripts/local-test.sh
+      
+      - name: Assert local-tests pass
+        if: steps.run-tests.outcome == 'sucess'
+        run: |
+          echo "❌ Expected failure for long keyword did not happen"
+          exit 1
+    
