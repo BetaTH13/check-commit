@@ -1,7 +1,7 @@
 # check-commit-messages
 
-GitHub Action to validate commits messages in pull requests
-Checks if commits contans a specific keyword.
+GitHub Action to validate commits messages in pull requests.
+Checks if commits contains a specific keyword.
 By default if **atleast one commit** contains the keyword the actions passes.
 There is an option to require all commits to contain the keyword.
 
