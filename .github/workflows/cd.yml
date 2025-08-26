@@ -23,7 +23,6 @@ jobs:
         uses: BetaTH13/release-tag-commit@baf145c0e5d50a918e49ea92ede0a394e722f569
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          v_prefix: "true"                 # strings required: "true"/"false"
           create_release: "true"
           mark_release_as_latest: "true"
           generate_release_notes: "true"
