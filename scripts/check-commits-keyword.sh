@@ -51,3 +51,8 @@ else
 fi
 
 echo "✅ OK: $MATCHING/$TOTAL commits contain '$KEYWORD' (require-all=$REQ_ALL)"
+if [[ -n "${GITHUB_OUTPUT:-}" ]] then
+  echo "total-commits=$TOTAL" >> $GITHUB_OUTPUT
+else 
+  echo "total-commits=$TOTAL"
+fi

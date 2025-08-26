@@ -13,11 +13,15 @@ inputs:
     description: "All commit messages must contain the keyword"
     required: false
     default: 'false'
+  commit-limit:
+    description: "Maximum number of commits permitted in a pull request."
+    required: false
 
 runs:
   using: "composite"
   steps:
     - name: Ensure this is a PR
+      id: pr-check
       shell: bash
       run: |
         if [[ "${{ github.event_name }}" != "pull_request" ]]; then
@@ -26,15 +30,30 @@ runs:
         fi
 
     - name: Fetch PR commit
+      id: fetch-commits
       shell: bash
       run: |
         git fetch --prune || true
 
     - name: Check commit message for keyword
+      id: check-commit-keyword
       shell: bash
       run: |
-        bash "${GITHUB_ACTION_PATH}/scripts/check-commits.sh" \
+        bash "${GITHUB_ACTION_PATH}/scripts/check-commits-keyword.sh" \
           "${{ inputs.keyword }}" \
           "${{ inputs.require-all }}" \
           "${{ github.event.pull_request.base.sha }}" \
           "${{ github.event.pull_request.head.sha }}"
+
+    - name: Check amount of commits
+      id: check-commit-amount
+      shell: bash
+      run: |
+        COMMIT_LIMIT=${{ inputs.commit-limit }}
+        TOTAL_COMMITS=${{ steps.check-commit-keyword.outputs.total-commits }}
+
+        if [[ $TOTAL_COMMITS > COMMIT_LIMIT ]]
+          echo "❌ amount of commits $TOTAL_COMMITS has exceeded the limit of $COMMIT_LIMIT" 
+          exit 1
+        fi
+
