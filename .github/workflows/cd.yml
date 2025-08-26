@@ -1,0 +1,29 @@
+name: CD - Tag & Release on PR merge
+
+on:
+  pull_request_target:
+    branches: [master]
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  tag-and-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout is optional for this action (it uses the API), but keeping it is fine.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag and  Release
+        uses: BetaTH13/release-tag-commit@baf145c0e5d50a918e49ea92ede0a394e722f569
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          v_prefix: "true"                 # strings required: "true"/"false"
+          create_release: "true"
+          mark_release_as_latest: "true"
+          generate_release_notes: "true"
