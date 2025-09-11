@@ -1,0 +1,23 @@
+name: Tag Preview on PR
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  tag-preview:
+    name: Preview Tag on PR
+    if: ${{ github.event.pull_request.merged != true && github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preview next tag
+        uses: BetaTH13/release-tag-commit@ab2519ac2c729d5e862f28ecfcb412a1a851be8f
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          comment_pr: "true"
+          create_release: "false"
+          mark_release_as_latest: "false"
+          generate_release_notes: "false"
