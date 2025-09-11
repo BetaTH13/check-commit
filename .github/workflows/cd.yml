@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   tag-and-release:
@@ -20,9 +20,10 @@ jobs:
           fetch-depth: 0
 
       - name: Tag and  Release
-        uses: BetaTH13/release-tag-commit@baf145c0e5d50a918e49ea92ede0a394e722f569
+        uses: BetaTH13/release-tag-commit@ab2519ac2c729d5e862f28ecfcb412a1a851be8f
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           create_release: "true"
           mark_release_as_latest: "true"
           generate_release_notes: "true"
+          comment_pr: "true"
